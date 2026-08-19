@@ -44,8 +44,10 @@ def create_app(env_name=None):
 
 def register_blueprints(app):
     from app.routes.health_routes import health_bp
+    from app.routes.debug_routes import debug_bp
 
     app.register_blueprint(health_bp)
+    app.register_blueprint(debug_bp)
 
     # Registered in later phases:
     # from app.routes.auth_routes import auth_bp
