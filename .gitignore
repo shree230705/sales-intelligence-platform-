@@ -1,0 +1,39 @@
+# --- Secrets ---
+.env
+.env.local
+*.env
+!.env.example
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Generated ML artifacts ---
+# The model is trained fresh via `backend/ml/train.py` on setup (see
+# docs/architecture.md), so we don't commit the binary.
+backend/ml/*.pkl
+
+# --- Node / frontend ---
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.local
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Docker ---
+*.log
+
+# --- MongoDB local data (if run outside Docker) ---
+data/db/
