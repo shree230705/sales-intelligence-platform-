@@ -40,3 +40,10 @@ def serialize_doc(doc):
 def serialize_list(docs):
     """Convert a cursor/list of MongoDB documents into a list of dicts."""
     return [serialize_doc(doc) for doc in docs]
+
+
+def serialize_user(user_doc):
+    serialized = serialize_doc(user_doc)
+    if serialized:
+        serialized.pop("passwordHash", None)
+    return serialized
