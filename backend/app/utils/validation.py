@@ -126,3 +126,57 @@ def validate_lead_payload(data, partial=False):
                 errors[required] = "This field is required."
 
     return errors, cleaned
+
+
+
+CUSTOMER_RELATIONSHIP_STATUSES = {"Active", "Inactive", "At Risk"}
+
+
+def validate_customer_payload(data, partial=False):
+    errors = {}
+    cleaned = {}
+
+    def field_present(name):
+        return not partial or name in data
+
+    if field_present("name"):
+        name = (data.get("name") or "").strip()
+        if len(name) < 2:
+            errors["name"] = "Name must be at least 2 characters."
+        cleaned["name"] = name
+
+    if field_present("company"):
+        company = (data.get("company") or "").strip()
+        if len(company) < 2:
+            errors["company"] = "Company must be at least 2 characters."
+        cleaned["company"] = company
+
+    if field_present("email"):
+        email = (data.get("email") or "").strip().lower()
+        if not EMAIL_REGEX.match(email):
+            errors["email"] = "A valid email address is required."
+        cleaned["email"] = email
+
+    if field_present("phone"):
+        cleaned["phone"] = (data.get("phone") or "").strip()
+
+    if field_present("industry"):
+        cleaned["industry"] = (data.get("industry") or "").strip()
+
+    if field_present("address"):
+        cleaned["address"] = (data.get("address") or "").strip()
+
+    if field_present("relationshipStatus"):
+        status = data.get("relationshipStatus", "Active")
+        if status not in CUSTOMER_RELATIONSHIP_STATUSES:
+            errors["relationshipStatus"] = (
+                f"Relationship status must be one of: {', '.join(sorted(CUSTOMER_RELATIONSHIP_STATUSES))}."
+            )
+        cleaned["relationshipStatus"] = status
+
+    if not partial:
+        for required in ("name", "company", "email"):
+            if not cleaned.get(required) and required not in errors:
+                errors[required] = "This field is required."
+
+    return errors, cleaned
